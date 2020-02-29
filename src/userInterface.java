@@ -1,5 +1,6 @@
 import primos.java.Numero;
-import java.util.*;
+
+import java.util.*; // Importamos el java.util para poder usar ArrayList
 
 /**
  *
@@ -33,6 +34,9 @@ public class userInterface extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
 
         button2.setLabel("button2");
 
@@ -61,6 +65,12 @@ public class userInterface extends javax.swing.JFrame {
 
         jLabel1.setText("Los números primos son:");
 
+        jLabel3.setText("Los divisores son:");
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -80,11 +90,14 @@ public class userInterface extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton1))
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane1))))
+                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -97,41 +110,87 @@ public class userInterface extends javax.swing.JFrame {
                     .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        int input = Integer.parseInt(textField1.getText());        
+        // Guardamos el valor del textField1 en la variable input
+        int input = Integer.parseInt(textField1.getText());      
+        /* 
+         * Obtenemos el valor absoluto en caso el número sea negativo 
+         * Para evitar errores en el bucle for
+        */
         int numero = Math.abs(input);
+        // Variable que almacenara la suma de los numeros primos encontrados
         int sumaPrimos = 0;
+        // Creamos una nueva instancia de ArrayList para guardar los números primos 
         ArrayList<Integer> primos = new ArrayList();
+        // Nueva instancia de ArrayList para guardar los divisores
+        ArrayList<Integer> divisores = new ArrayList();
+        // Añadimos el 2 teniendo en cuenta que el 2 es un numero primo par
         primos.add(2);
         
-        for ( int s = 3; s <= numero; s += 2 ) {
-            if ( Numero.esPrimo(s)) {
-                continue;
-            }            
-            primos.add(s);            
+        /*
+         * Encontrar los divisores del numero que el usuario ingrese
+         */
+        
+        for ( int i = 1; i < numero; i++ ) {
+            
+            int residuo = numero % i;
+            
+            if ( residuo == 0 ) {
+                divisores.add(i);
+            }
+            
         }
         
+        jTextArea2.setText(String.valueOf(divisores));
+        /*
+         * Iniciamos la variable en 3
+         * Incrementamos la variable de 2 en 2 para eliminar los numeros pares
+         * Hacemos eso para optimizar un poco las operaciones 
+        */ 
+        for ( int s = 3; s <= numero; s += 2 ) {
+            /**
+             * @param s el número el cual queremos comprobar si es primo
+             * @return Verdadero si el número no es primo y falso si lo es
+             */
+            if ( Numero.esPrimo(s)) {
+                // Eliminamos los números que no sean primo 
+                continue;
+            }                        
+            primos.add(s); // Añadimos los numeros primos al ArrayList
+        }
+                
+        /*
+         * Establecemos el valor del jTextArea1
+         * Con los números primos encontrados
+        */
         jTextArea1.setText(String.valueOf(primos));
         
         for (int primo: primos) {
             sumaPrimos += primo;
         }
         
+        /* Establecemos el valor del jTextField1 
+         * Con la suma de los números primos encontrados
+        */
         jTextField1.setText(String.valueOf(sumaPrimos));
     }//GEN-LAST:event_jButton1ActionPerformed
     
@@ -175,8 +234,11 @@ public class userInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
     private java.awt.Label label1;
     private java.awt.Label label2;

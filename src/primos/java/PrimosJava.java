@@ -12,6 +12,8 @@ public class PrimosJava {
         ArrayList<Integer> primos = new ArrayList();
         primos.add(2);
         
+        ArrayList<Integer> divisores = new ArrayList();
+        
         Scanner input = new Scanner(System.in);
         
         int numero;
@@ -21,9 +23,10 @@ public class PrimosJava {
         
         numero = input.nextInt();
         
-        int numeroAbs = Math.abs(numero);
+        int numeroAbs = Math.abs(numero);                
         
-        for ( int s = 3; s <= numeroAbs; s += 2) {
+        // Encuentra los números primos
+        for ( int s = 3; s <= numeroAbs; s += 2) {            
             if (Numero.esPrimo(s)) {
                 continue;
             }
@@ -33,15 +36,8 @@ public class PrimosJava {
         // sumaPrimos = primos.stream().map((e) -> e).reduce(sumaPrimos, Integer::sum);
         for (int e: primos) {
             sumaPrimos += e;
-        }
-        System.out.println(primos);
-        System.out.println(sumaPrimos);
+        }       
         
-        if (Numero.esPrimo(5)) {
-            System.out.println("El número no es primo");
-        } else {
-            System.out.println("El número es primo");
-        }
     }
     
 }
